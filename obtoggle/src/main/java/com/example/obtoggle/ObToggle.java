@@ -75,19 +75,17 @@ public class ObToggle extends ToggleButton {
     protected void onDraw(Canvas canvas) {
 
         if (mLeftIconBg != null){
-            mHeight = canvas.getClipBounds().bottom;
-            mLeftIconBg.setBounds(parseToDp(0), parseToDp(0), mHeight, mHeight);
-            mLeftIconBg.setState(getDrawableState());
-            mLeftIconBg.draw(canvas);
-            paddingIcon();
+            drawLeftIconBackground(canvas);
         } else {
-            mHeight = canvas.getClipBounds().bottom;
             mLeftIconBg = getDefLeftIconBg();
-            mLeftIconBg.setBounds(parseToDp(0), parseToDp(0), mHeight, mHeight);
-            mLeftIconBg.setState(getDrawableState());
-            mLeftIconBg.draw(canvas);
-            paddingIcon();
+            drawLeftIconBackground(canvas);
         }
+        drawLeftIcon(canvas);
+        super.onDraw(canvas);
+
+    }
+
+    private void drawLeftIcon(Canvas canvas) {
         if (mDrawable != null){
             int s = (int) (mHeight * 0.8);
             int xy = (int) (mHeight * 0.2);
@@ -95,8 +93,14 @@ public class ObToggle extends ToggleButton {
             mDrawable.setState(getDrawableState());
             mDrawable.draw(canvas);
         }
-        super.onDraw(canvas);
+    }
 
+    private void drawLeftIconBackground(Canvas canvas) {
+        mHeight = canvas.getClipBounds().bottom;
+        mLeftIconBg.setBounds(parseToDp(0), parseToDp(0), mHeight, mHeight);
+        mLeftIconBg.setState(getDrawableState());
+        mLeftIconBg.draw(canvas);
+        paddingIcon();
     }
 
     @Override
