@@ -25,7 +25,6 @@ public class ObToggle extends ToggleButton {
     private int mHeight = parseToDp(45);
     private int mWidth = parseToDp(100);
     private Rect mRect = new Rect();
-    private Paint mTextPaint;
 
     public ObToggle(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -42,50 +41,51 @@ public class ObToggle extends ToggleButton {
         init();
     }
 
-    private void init(){
+    private void init() {
         init(null, 0);
     }
 
-    private Paint getTextPaint(){
-        mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint getTextPaint() {
+
+        Paint mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setColor(getCurrentTextColor());
         mTextPaint.setTextSize(getTextSize());
         mTextPaint.setTextAlign(Paint.Align.CENTER);
         mTextPaint.setStyle(Paint.Style.FILL);
+
         return mTextPaint;
     }
 
-    public void setTextColor(int color){
-        mTextPaint.setColor(color);
-        invalidate();
-    }
+    private void init(AttributeSet attr, int defStyleAttr) {
 
-    private void init(AttributeSet attr, int defStyleAttr){
-
-        setBackgroundDrawable(getDefLeftIconBg());
         TypedArray typedArray = getContext().obtainStyledAttributes(attr, R.styleable.ObToggle, defStyleAttr, 0);
+
         int count = typedArray.getIndexCount();
+
         for (int i = 0; i < count; i++) {
+
             int i1 = typedArray.getIndex(i);
+
             if (i1 == R.styleable.ObToggle_backgroundDrawable) {
-                setBackgroundDrawable(typedArray.getDrawable(i));
+                setMyBackground(typedArray.getDrawable(i));
+
             } else if (i1 == R.styleable.ObToggle_leftIconBackgroundDrawable) {
-                setLeftIconBackground(typedArray.getDrawable(i));
+                setLeftIconBackground(typedArray.getDrawable(i1));
+
             } else if (i1 == R.styleable.ObToggle_leftIconDrawable) {
-                setLeftIcon(typedArray.getDrawable(i));
+                setLeftIcon(typedArray.getDrawable(i1));
             }
         }
 
         typedArray.recycle();
     }
 
-    @Override
-    public void setBackgroundDrawable(Drawable drawable){
+    private void setMyBackground(Drawable drawable) {
         mBg = drawable;
-        super.setBackgroundDrawable(mBg);
+        invalidate();
     }
 
-    private void paddingIcon(){
+    private void paddingIcon() {
         setPadding(mHeight, parseToDp(0), parseToDp(0), parseToDp(0));
     }
 
@@ -100,6 +100,19 @@ public class ObToggle extends ToggleButton {
         drawText(canvas);
     }
 
+    private void drawBackground(Canvas canvas) {
+        if (mBg != null){
+            mBg.setBounds(mRect);
+            mBg.setState(getDrawableState());
+            mBg.draw(canvas);
+        } else {
+            mBg = getDefaultBg();
+            mBg.setBounds(mRect);
+            mBg.setState(getDrawableState());
+            mBg.draw(canvas);
+        }
+    }
+
     protected void drawText(Canvas canvas) {
         if (getText() != null) {
             Rect bounds = new Rect();
@@ -109,14 +122,8 @@ public class ObToggle extends ToggleButton {
         }
     }
 
-    protected void drawBackground(Canvas canvas) {
-        mBg.setBounds(0, 0, mWidth, mHeight);
-        mBg.setState(getDrawableState());
-        mBg.draw(canvas);
-    }
-
     protected void drawLeftIcon(Canvas canvas) {
-        if (mDrawable != null){
+        if (mDrawable != null) {
             int s = (int) (mHeight * 0.8);
             int xy = (int) (mHeight * 0.2);
             mDrawable.setBounds(xy, xy, s, s);
@@ -148,32 +155,31 @@ public class ObToggle extends ToggleButton {
         invalidate();
     }
 
-    private int parseToDp(int val){
-       return (int) getContext().getResources().getDisplayMetrics().scaledDensity * val;
+    private int parseToDp(int val) {
+        return (int) getContext().getResources().getDisplayMetrics().scaledDensity * val;
     }
 
-    public void setLeftIcon(Drawable drawable){
+    public void setLeftIcon(Drawable drawable) {
         mDrawable = drawable;
         invalidate();
     }
 
-    public void setLeftIconBackground(Drawable drawable){
+    public void setLeftIconBackground(Drawable drawable) {
         mLeftIconBg = drawable;
         invalidate();
     }
 
-    private Drawable getDefaultBg(){
+    private Drawable getDefaultBg() {
         return ContextCompat.getDrawable(getContext(), R.drawable.def_bg);
     }
 
-    private Drawable getEmptyIcon(){
+    private Drawable getEmptyIcon() {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setColor(Color.TRANSPARENT);
         return drawable;
     }
 
-    private Drawable getDefLeftIconBg(){
+    private Drawable getDefLeftIconBg() {
         return ContextCompat.getDrawable(getContext(), R.drawable.def_icon_bg);
     }
-
 }

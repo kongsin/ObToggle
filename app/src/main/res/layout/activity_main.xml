@@ -22,6 +22,6 @@
         android:textSize="20sp"
         app:leftIconBackgroundDrawable="@drawable/icon_bg"
         app:leftIconDrawable="@drawable/ic_directions_grey"
-        app:backgroundDrawable="@drawable/bg"/>
+        />
 
 </RelativeLayout>

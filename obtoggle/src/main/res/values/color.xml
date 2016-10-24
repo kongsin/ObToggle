@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorOn">#d43f5d</color>
+    <color name="colorOnDark">#e13255</color>
+    <color name="colorOff">#ffffff</color>
+    <color name="colorOffDark">#949494</color>
+</resources>

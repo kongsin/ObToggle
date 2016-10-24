@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ObToggle">
-        <attr name="backgroundDrawable" format="reference">@drawable/def_bg</attr>
-        <attr name="leftIconBackgroundDrawable" format="reference">@drawable/def_icon_bg</attr>
-        <attr name="leftIconDrawable" format="reference">@drawable/ic_directions_grey</attr>
+        <attr name="backgroundDrawable" format="reference"/>
+        <attr name="leftIconBackgroundDrawable" format="reference"/>
+        <attr name="leftIconDrawable" format="reference"/>
     </declare-styleable>
 </resources>
