@@ -1,4 +1,4 @@
-package com.example.kognsin.customtoggle;
+package com.obview.kognsin.customtoggle;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

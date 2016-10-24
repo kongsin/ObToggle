@@ -1,4 +1,4 @@
-package com.example.obtoggle;
+package com.obview.obtoggle;
 
 import org.junit.Test;
 

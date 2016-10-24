@@ -1,11 +1,11 @@
-package com.example.kognsin.customtoggle;
+package com.obview.kognsin.customtoggle;
 
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.obtoggle.ObToggle;
+import com.obview.obtoggle.ObToggle;
 
 public class MainActivity extends AppCompatActivity {
 

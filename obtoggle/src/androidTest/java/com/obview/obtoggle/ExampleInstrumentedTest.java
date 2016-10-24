@@ -1,4 +1,4 @@
-package com.example.obtoggle;
+package com.obview.obtoggle;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

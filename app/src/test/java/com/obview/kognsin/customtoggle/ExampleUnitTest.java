@@ -1,4 +1,4 @@
-package com.example.kognsin.customtoggle;
+package com.obview.kognsin.customtoggle;
 
 import org.junit.Test;
 
