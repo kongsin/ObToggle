@@ -12,16 +12,16 @@
     tools:context="com.example.kognsin.customtoggle.MainActivity">
 
     <com.example.obtoggle.ObToggle
-        android:checked="false"
+        android:checked="true"
         android:enabled="true"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:textOn="Buffet"
-        android:textOff="A-La-Cart"
+        android:textOn="@string/buffet"
+        android:textOff="@string/a_la_cart"
         android:id="@+id/obToggle"
-        android:textSize="16dp"
+        android:textSize="20sp"
         app:leftIconBackgroundDrawable="@drawable/icon_bg"
-        app:leftIconDrawable="@drawable/ic_directions_white"
-        android:background="@drawable/bg"/>
+        app:leftIconDrawable="@drawable/ic_directions_grey"
+        app:backgroundDrawable="@drawable/bg"/>
 
 </RelativeLayout>

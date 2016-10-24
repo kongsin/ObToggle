@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CustomToggle</string>
+    <string name="buffet">Buffet</string>
+    <string name="a_la_cart">A-La-Cart</string>
 </resources>

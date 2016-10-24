@@ -3,7 +3,11 @@ package com.example.obtoggle;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.RemoteViews;
@@ -17,17 +21,20 @@ import android.widget.ToggleButton;
 public class ObToggle extends ToggleButton {
 
     private static final String TAG = "ObToggle";
-    private Drawable mDrawable, mLeftIconBg;
+    private Drawable mDrawable, mLeftIconBg, mBg;
     private int mHeight = parseToDp(45);
+    private int mWidth = parseToDp(100);
+    private Rect mRect = new Rect();
+    private Paint mTextPaint;
 
     public ObToggle(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs);
+        init(attrs, 0);
     }
 
     public ObToggle(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(attrs);
+        init(attrs, 0);
     }
 
     public ObToggle(Context context) {
@@ -36,35 +43,46 @@ public class ObToggle extends ToggleButton {
     }
 
     private void init(){
-        init(null);
+        init(null, 0);
     }
 
-    private void init(AttributeSet attr){
+    private Paint getTextPaint(){
+        mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mTextPaint.setColor(getCurrentTextColor());
+        mTextPaint.setTextSize(getTextSize());
+        mTextPaint.setTextAlign(Paint.Align.CENTER);
+        mTextPaint.setStyle(Paint.Style.FILL);
+        return mTextPaint;
+    }
 
-        post(new Runnable() {
-            @Override
-            public void run() {
-                mHeight = getHeight();
-                if (getBackground() == null){
-                    setBackgroundDrawable(getDefaultBg());
-                    invalidate();
-                }
-                invalidate();
-            }
-        });
+    public void setTextColor(int color){
+        mTextPaint.setColor(color);
+        invalidate();
+    }
 
-        TypedArray typedArray = getContext().obtainStyledAttributes(attr, R.styleable.ObToggle, 0, 0);
+    private void init(AttributeSet attr, int defStyleAttr){
+
+        setBackgroundDrawable(getDefLeftIconBg());
+        TypedArray typedArray = getContext().obtainStyledAttributes(attr, R.styleable.ObToggle, defStyleAttr, 0);
         int count = typedArray.getIndexCount();
         for (int i = 0; i < count; i++) {
             int i1 = typedArray.getIndex(i);
-            if (i1 == R.styleable.ObToggle_leftIconDrawable) {
-                setLeftIcon(typedArray.getDrawable(i));
+            if (i1 == R.styleable.ObToggle_backgroundDrawable) {
+                setBackgroundDrawable(typedArray.getDrawable(i));
             } else if (i1 == R.styleable.ObToggle_leftIconBackgroundDrawable) {
                 setLeftIconBackground(typedArray.getDrawable(i));
+            } else if (i1 == R.styleable.ObToggle_leftIconDrawable) {
+                setLeftIcon(typedArray.getDrawable(i));
             }
         }
 
         typedArray.recycle();
+    }
+
+    @Override
+    public void setBackgroundDrawable(Drawable drawable){
+        mBg = drawable;
+        super.setBackgroundDrawable(mBg);
     }
 
     private void paddingIcon(){
@@ -73,16 +91,28 @@ public class ObToggle extends ToggleButton {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
-        if (mLeftIconBg != null){
-            drawLeftIconBackground(canvas);
-        } else {
-            mLeftIconBg = getDefLeftIconBg();
-            drawLeftIconBackground(canvas);
-        }
+        canvas.getClipBounds(mRect);
+        mHeight = mRect.bottom;
+        mWidth = mRect.right;
+        drawBackground(canvas);
+        drawLeftIconBackground(canvas);
         drawLeftIcon(canvas);
-        super.onDraw(canvas);
+        drawText(canvas);
+    }
 
+    protected void drawText(Canvas canvas) {
+        if (getText() != null) {
+            Rect bounds = new Rect();
+            Paint textPaint = getTextPaint();
+            textPaint.getTextBounds(getText().toString(), 0, getText().length(), bounds);
+            canvas.drawText(getText(), 0, getText().length(), (mWidth + mHeight) / 2, (mHeight / 2) - bounds.exactCenterY(), textPaint);
+        }
+    }
+
+    protected void drawBackground(Canvas canvas) {
+        mBg.setBounds(0, 0, mWidth, mHeight);
+        mBg.setState(getDrawableState());
+        mBg.draw(canvas);
     }
 
     protected void drawLeftIcon(Canvas canvas) {
@@ -96,10 +126,18 @@ public class ObToggle extends ToggleButton {
     }
 
     protected void drawLeftIconBackground(Canvas canvas) {
-        mHeight = canvas.getClipBounds().bottom;
-        mLeftIconBg.setBounds(parseToDp(0), parseToDp(0), mHeight, mHeight);
-        mLeftIconBg.setState(getDrawableState());
-        mLeftIconBg.draw(canvas);
+        if (mLeftIconBg != null) {
+            int h = mHeight;
+            mLeftIconBg.setBounds(0, 0, h, h);
+            mLeftIconBg.setState(getDrawableState());
+            mLeftIconBg.draw(canvas);
+        } else {
+            int h = mHeight;
+            Drawable drawable = getDefLeftIconBg();
+            drawable.setBounds(parseToDp(0), parseToDp(0), h, h);
+            drawable.setState(getDrawableState());
+            drawable.draw(canvas);
+        }
         paddingIcon();
     }
 
@@ -126,6 +164,12 @@ public class ObToggle extends ToggleButton {
 
     private Drawable getDefaultBg(){
         return ContextCompat.getDrawable(getContext(), R.drawable.def_bg);
+    }
+
+    private Drawable getEmptyIcon(){
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(Color.TRANSPARENT);
+        return drawable;
     }
 
     private Drawable getDefLeftIconBg(){
