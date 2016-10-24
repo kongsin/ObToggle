@@ -28,7 +28,7 @@ public class ObToggle extends ToggleButton {
 
     public ObToggle(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs, 0);
+        init(attrs, defStyleAttr);
     }
 
     public ObToggle(Context context, AttributeSet attrs) {
